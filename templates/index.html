@@ -1,38 +1,58 @@
 {% extends "base.html" %}
 
-{% block title %}AI Reel Generator - Create Amazing Instagram Reels{% endblock %}
+{% block title %}VidVoice - Create Amazing Reels with AI Voice{% endblock %}
 
 {% block content %}
 <section class="hero-section">
-    <div class="container">
-        <h1 class="hero-title">Create Amazing Instagram Reels with AI</h1>
-        <p class="hero-subtitle">Transform your videos into engaging reels with our AI-powered platform</p>
-        <a href="/create" class="cta-button">Start Creating Now</a>
+    <div class="hero-glow"></div>
+    <div class="container relative-z">
+        <div class="hero-badge"><i class="fas fa-sparkles me-2"></i> Next-Gen AI Video & Voice Synthesis</div>
+        <h1 class="hero-title">Transform Ideas into <span class="gradient-text">VidVoice Reels</span></h1>
+        <p class="hero-subtitle">Combine images, videos, and natural AI voiceover seamlessly into engaging short-form content in seconds.</p>
+        <div class="hero-cta-group">
+            <a href="/create" class="cta-button primary-cta">
+                <span>Start Creating Now</span>
+                <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+            <a href="/gallery" class="cta-button secondary-cta">
+                <i class="fas fa-play me-2"></i> Explore Gallery
+            </a>
+        </div>
     </div>
 </section>
 
 <section class="features-section">
     <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Engineered for Content Creators</h2>
+            <p class="section-subtitle">Everything you need to produce viral, high-quality reels effortlessly.</p>
+        </div>
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="feature-card">
-                    <i class="fas fa-magic feature-icon"></i>
-                    <h3>AI-Powered Editing</h3>
-                    <p>Let our AI analyze and enhance your videos automatically</p>
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-wand-magic-sparkles feature-icon"></i>
+                    </div>
+                    <h3>AI Voice Generation</h3>
+                    <p>Convert descriptive text into natural, crystal-clear voiceover audio automatically.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="feature-card">
-                    <i class="fas fa-film feature-icon"></i>
-                    <h3>Smart Stitching</h3>
-                    <p>Seamlessly combine multiple clips into perfect reels</p>
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-film feature-icon"></i>
+                    </div>
+                    <h3>Smart Media Stitching</h3>
+                    <p>Seamlessly assemble your uploaded images and clips into a vertical HD reel layout.</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="feature-card">
-                    <i class="fas fa-music feature-icon"></i>
-                    <h3>Music Integration</h3>
-                    <p>Add trending music and sound effects to your reels</p>
+                    <div class="feature-icon-wrapper">
+                        <i class="fas fa-bolt feature-icon"></i>
+                    </div>
+                    <h3>Fast Queue Processing</h3>
+                    <p>Background pipeline renders production-ready reels ready for playback and export.</p>
                 </div>
             </div>
         </div>
@@ -41,13 +61,41 @@
 
 <section class="showcase-section">
     <div class="container">
-        <h2 class="showcase-title">Featured Creations</h2>
+        <div class="section-header">
+            <h2 class="section-title">Featured Showcase</h2>
+            <p class="section-subtitle">Discover high-impact videos created with VidVoice</p>
+        </div>
         <div class="image-grid">
-            <img src="{{ url_for('static', filename='1.jpg') }}" alt="Reel Example 1" class="showcase-image">
-            <img src="{{ url_for('static', filename='2.jpg') }}" alt="Reel Example 2" class="showcase-image">
-            <img src="{{ url_for('static', filename='3.jpg') }}" alt="Reel Example 3" class="showcase-image">
-            <img src="{{ url_for('static', filename='4.jpg') }}" alt="Reel Example 4" class="showcase-image">
-            <img src="{{ url_for('static', filename='5.jpg') }}" alt="Reel Example 5" class="showcase-image">
+            <div class="showcase-card">
+                <img src="{{ url_for('static', filename='1.jpg') }}" alt="Reel Example 1" class="showcase-image">
+                <div class="showcase-overlay">
+                    <span class="showcase-tag">Travel</span>
+                </div>
+            </div>
+            <div class="showcase-card">
+                <img src="{{ url_for('static', filename='2.jpg') }}" alt="Reel Example 2" class="showcase-image">
+                <div class="showcase-overlay">
+                    <span class="showcase-tag">Lifestyle</span>
+                </div>
+            </div>
+            <div class="showcase-card">
+                <img src="{{ url_for('static', filename='3.jpg') }}" alt="Reel Example 3" class="showcase-image">
+                <div class="showcase-overlay">
+                    <span class="showcase-tag">Tech</span>
+                </div>
+            </div>
+            <div class="showcase-card">
+                <img src="{{ url_for('static', filename='4.jpg') }}" alt="Reel Example 4" class="showcase-image">
+                <div class="showcase-overlay">
+                    <span class="showcase-tag">Creative</span>
+                </div>
+            </div>
+            <div class="showcase-card">
+                <img src="{{ url_for('static', filename='5.jpg') }}" alt="Reel Example 5" class="showcase-image">
+                <div class="showcase-overlay">
+                    <span class="showcase-tag">Vlog</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>

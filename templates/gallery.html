@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Gallery - AI Reel Generator{% endblock %}
+{% block title %}Gallery - VidVoice{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}">
@@ -8,12 +8,36 @@
 
 {% block content %}
 <div class="container gallery-container">
-    <h1 class="gallery-title">Reel Gallery</h1>
-    <div class="gallery-grid " >
+    <div class="gallery-header">
+        <h1 class="gallery-title">Reel Gallery</h1>
+        <p class="gallery-subtitle">Browse and watch all AI voiceover reels created with VidVoice.</p>
+    </div>
+    
+    {% if reels %}
+    <div class="gallery-grid">
         {% for reel in reels %}
-        <video src="/static/reels/{{reel}}" controls></video>
-            
+        <div class="gallery-card">
+            <div class="video-wrapper">
+                <video src="/static/reels/{{reel}}" controls preload="metadata"></video>
+            </div>
+            <div class="card-footer-info">
+                <span class="reel-badge"><i class="fas fa-play-circle me-1"></i> VidVoice Reel</span>
+                <span class="reel-name">{{ reel }}</span>
+            </div>
+        </div>
         {% endfor %}
     </div>
+    {% else %}
+    <div class="empty-gallery">
+        <div class="empty-icon-wrapper">
+            <i class="fas fa-film empty-icon"></i>
+        </div>
+        <h3>No Reels Generated Yet</h3>
+        <p>Create your very first AI video reel with voiceover in seconds.</p>
+        <a href="/create" class="cta-button primary-cta mt-3">
+            <i class="fas fa-plus me-2"></i> Create Reel Now
+        </a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %} 
