@@ -17,18 +17,25 @@ def create_reel(folder):
     
     print("CR - ", folder)
 
+def process_folder(folder):
+    """Callable function to process audio generation and video creation for a folder."""
+    text_to_audio(folder)
+    create_reel(folder)
+    os.makedirs(os.path.dirname("done.txt") or ".", exist_ok=True)
+    with open("done.txt", "a") as f:
+        f.write(folder + "\n")
+
 if __name__ == "__main__":
     while True:
         print("Processing queue...")
-        with open("done.txt", "r") as f:
-            done_folders = f.readlines()
+        done_folders = []
+        if os.path.exists("done.txt"):
+            with open("done.txt", "r") as f:
+                done_folders = [line.strip() for line in f.readlines()]
 
-        done_folders = [f.strip() for f in done_folders]
-        folders = os.listdir("user_uploads") 
-        for folder in folders:
-            if(folder not in done_folders): 
-                text_to_audio(folder) # Generate the audio.mp3 from desc.txt
-                create_reel(folder) # Convert the images and audio.mp3 inside the folder to a reel
-                with open("done.txt", "a") as f:
-                    f.write(folder + "\n")
+        if os.path.exists("user_uploads"):
+            folders = os.listdir("user_uploads") 
+            for folder in folders:
+                if folder not in done_folders:
+                    process_folder(folder)
         time.sleep(4)

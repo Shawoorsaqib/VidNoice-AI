@@ -3,11 +3,15 @@ import os
 import uuid
 from elevenlabs import VoiceSettings
 from elevenlabs.client import ElevenLabs
-from config import ELEVENLABS_API_KEY
+try:
+    from config import ELEVENLABS_API_KEY
+except ImportError:
+    ELEVENLABS_API_KEY = ""
 
+api_key = os.getenv("ELEVENLABS_API_KEY", ELEVENLABS_API_KEY)
 
 elevenlabs = ElevenLabs(
-    api_key=ELEVENLABS_API_KEY,
+    api_key=api_key,
 )
 
 
