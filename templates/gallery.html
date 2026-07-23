@@ -14,21 +14,29 @@
     </div>
     
     {% if reels %}
-    <div class="gallery-grid">
+    <div class="gallery-grid" id="galleryGrid">
         {% for reel in reels %}
-        <div class="gallery-card">
+        <div class="gallery-card" id="reel-card-{{ loop.index }}">
             <div class="video-wrapper">
                 <video src="/static/reels/{{reel}}" controls preload="metadata"></video>
+                <button type="button" class="btn-delete-overlay" onclick="confirmDelete('{{ reel }}', 'reel-card-{{ loop.index }}')" title="Delete Reel" aria-label="Delete Reel">
+                    <i class="fas fa-trash-can"></i>
+                </button>
             </div>
             <div class="card-footer-info">
-                <span class="reel-badge"><i class="fas fa-play-circle me-1"></i> VidVoice Reel</span>
-                <span class="reel-name">{{ reel }}</span>
+                <div class="d-flex align-items-center justify-content-between">
+                    <span class="reel-badge"><i class="fas fa-play-circle me-1"></i> VidVoice Reel</span>
+                    <button type="button" class="btn-delete-card" onclick="confirmDelete('{{ reel }}', 'reel-card-{{ loop.index }}')" title="Delete Reel">
+                        <i class="fas fa-trash-can me-1"></i> Delete
+                    </button>
+                </div>
+                <span class="reel-name" title="{{ reel }}">{{ reel }}</span>
             </div>
         </div>
         {% endfor %}
     </div>
     {% else %}
-    <div class="empty-gallery">
+    <div class="empty-gallery" id="emptyGalleryState">
         <div class="empty-icon-wrapper">
             <i class="fas fa-film empty-icon"></i>
         </div>
@@ -40,4 +48,93 @@
     </div>
     {% endif %}
 </div>
+
+<!-- Modal for confirming deletion -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="deleteModalLabel"><i class="fas fa-triangle-exclamation text-warning me-2"></i>Delete Reel</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteReelName" class="text-gradient"></strong>?</p>
+                <p class="text-muted small mb-0">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" action="">
+                    <button type="submit" id="confirmDeleteBtn" class="btn btn-danger btn-modal-delete">
+                        <i class="fas fa-trash-can me-1"></i> Delete Reel
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let targetReel = '';
+let targetCardId = '';
+
+function confirmDelete(reelName, cardId) {
+    targetReel = reelName;
+    targetCardId = cardId;
+    document.getElementById('deleteReelName').textContent = reelName;
+    document.getElementById('deleteForm').action = '/delete/' + encodeURIComponent(reelName);
+    
+    const modalEl = document.getElementById('deleteConfirmModal');
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+}
+
+document.getElementById('deleteForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const actionUrl = this.action;
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    confirmBtn.disabled = true;
+    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Deleting...';
+
+    fetch(actionUrl, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const modalEl = document.getElementById('deleteConfirmModal');
+        const modal = bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+        
+        confirmBtn.disabled = false;
+        confirmBtn.innerHTML = '<i class="fas fa-trash-can me-1"></i> Delete Reel';
+
+        if (data.success) {
+            const card = document.getElementById(targetCardId);
+            if (card) {
+                card.style.transition = 'all 0.4s ease';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    card.remove();
+                    const remainingCards = document.querySelectorAll('.gallery-card');
+                    if (remainingCards.length === 0) {
+                        location.reload();
+                    }
+                }, 400);
+            }
+        } else {
+            alert('Failed to delete reel.');
+        }
+    })
+    .catch(err => {
+        console.error('Delete error:', err);
+        this.submit();
+    });
+});
+</script>
 {% endblock %} 
