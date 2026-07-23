@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import uuid
 from werkzeug.utils import secure_filename
 import os
+import threading
 from generate_process import process_folder
 
 UPLOAD_FOLDER = 'user_uploads'
@@ -44,8 +45,9 @@ def create():
             for fl in input_files:
                 f.write(f"file '{fl}'\nduration 1\n")
 
-        # Call the reel generation process directly
-        process_folder(rec_id)
+        # Run the reel generation in a background thread to prevent Gunicorn timeout
+        thread = threading.Thread(target=process_folder, args=(rec_id,), daemon=True)
+        thread.start()
 
         return redirect(url_for("gallery"))
 
