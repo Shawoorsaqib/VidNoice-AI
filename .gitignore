@@ -4,6 +4,4 @@ __pycache__/
 *.mp4
 *.avi
 *.mov
-*.txt
 ffmpeg_command.txt
-gi
